@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 
 // 区分开发环境和生产环境  命令行的参数
-const args = args
+const args = yargs
 
 	.option('production', {
 	boolean: true,
@@ -22,7 +22,7 @@ const args = args
 })
 
 .option('sourcemaps', {
-	describe: 'force the creation of sourcemaps'
+	describe: 'force the creation of sroucemaps'
 })
 
 .option('port', {
@@ -32,3 +32,5 @@ const args = args
 })
 
 .argv
+
+export default args;
