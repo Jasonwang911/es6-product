@@ -1,6 +1,8 @@
 // import './class/lesson1.js';
 import 'babel-polyfill';
-import './class/lesson5.js';
+// import './class/lesson5.js';
+// import './mianshiText.js';
+import './prototype.js';
 
 
 class Test {
