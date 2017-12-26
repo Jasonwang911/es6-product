@@ -9612,6 +9612,14 @@ module.exports = function (regExp, replace) {
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 // 关于js中的继承
 // 继承主要是依靠 原型链 来实现。
 // 来源：http://www.jb51.net/article/81766.htm
@@ -9660,41 +9668,41 @@ console.log('正整数', Num(25736));
 
 // 原型链实现继承例子：
 
-function SuperType() {
-	this.property = true;
-}
-SuperType.prototype.getSuperValue = function () {
-	return this.property;
-};
+// function SuperType() {
+// 	this.property = true;
+// }
+// SuperType.prototype.getSuperValue = function() {
+// 	return this.property;
+// }
 
-function subType() {
-	this.property = false;
-}
-//继承了SuperType
-SubType.prototype = new SuperType();
-SubType.prototype.getSubValue = function () {
-	return this.property;
-};
-var instance = new SubType();
-console.log(instance.getSuperValue()); //true
+// function subType() {
+// 	this.property = false;
+// }
+// //继承了SuperType
+// SubType.prototype = new SuperType();
+// SubType.prototype.getSubValue = function() {
+// 	return this.property;
+// }
+// var instance = new SubType();
+// console.log(instance.getSuperValue()); //true
 
 
 // 2. 借用构造函数
 
 // 基本思想： 在子类型构造函数的内部调用超类构造函数， 通过使用call() 和apply() 方法可以在新创建的对象上执行构造函数。
 
-function SuperType() {
-	this.colors = ["red", "blue", "green"];
-}
+// function SuperType() {
+// 	this.colors = ["red", "blue", "green"];
+// }
 
-function SubType() {
-	SuperType.call(this, arguments); //继承了SuperType
-}
-var instance1 = new SubType();
-instance1.colors.push("black");
-console.log(instance1.colors); //"red","blue","green","black"
-var instance2 = new SubType();
-console.log(instance2.colors); //"red","blue","green"
+// function SubType() {
+// 	SuperType.call(this, arguments); //继承了SuperType
+// }
+// var instance1 = new SubType();
+// instance1.colors.push("black");
+// console.log(instance1.colors); //"red","blue","green","black"
+// var instance2 = new SubType();
+// console.log(instance2.colors); //"red","blue","green"
 
 // 3. 组合继承
 
@@ -9731,6 +9739,106 @@ console.log(instance2.colors); //"red","blue","green"
 // 4.原型式继承
 
 // 基本想法：借助原型可以基于已有的对象创建新对象，同时还不必须因此创建自定义的类型。
+
+// ES5 中的写法
+function Person() {
+	var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'jason';
+	var age = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '18';
+
+	this.name = name;
+	this.age = age;
+}
+
+Person.prototype.sayName = function () {
+	return this.name;
+};
+
+Person.prototype.sayAge = function () {
+	return this.age;
+};
+
+var p1 = new Person('Zinedine', '28');
+var name1 = p1.sayName();
+console.log(name1);
+var age1 = p1.sayAge();
+console.log(age1);
+
+// Worker 继承了 Person 的 name 和 age
+function Worker() {
+	var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'jason';
+	var age = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '18';
+	var job = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '捡破烂的';
+
+	Person.call(this, name, age);
+	this.job = job;
+}
+
+Worker.prototype = new Person();
+Worker.prototype.constructor = Worker;
+
+Worker.prototype.sayJob = function () {
+	return this.job;
+};
+
+var w1 = new Worker('xiaoming', '50', '掏大粪的');
+var job1 = w1.sayJob();
+console.log(job1);
+
+// es6 的写法
+
+var Animal = function () {
+	function Animal() {
+		var kind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '猫猫';
+		var speak = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '瞄';
+
+		_classCallCheck(this, Animal);
+
+		this.kind = kind;
+		this.speak = speak;
+	}
+
+	_createClass(Animal, [{
+		key: 'saySpeak',
+		value: function saySpeak() {
+			return this.speak;
+		}
+	}]);
+
+	return Animal;
+}();
+
+var a1 = new Animal('羊', '绵');
+var say1 = a1.saySpeak();
+console.log(say1);
+
+// 继承
+
+var Dog = function (_Animal) {
+	_inherits(Dog, _Animal);
+
+	function Dog(kind) {
+		var speak = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '汪汪';
+
+		_classCallCheck(this, Dog);
+
+		var _this = _possibleConstructorReturn(this, (Dog.__proto__ || Object.getPrototypeOf(Dog)).call(this, kind));
+
+		_this.speak = speak;
+		return _this;
+	}
+
+	_createClass(Dog, [{
+		key: 'saySpeak',
+		value: function saySpeak() {
+			return this.speak;
+		}
+	}]);
+
+	return Dog;
+}(Animal);
+
+var d1 = new Dog('狗狗');
+console.log(d1.saySpeak());
 
 /***/ })
 /******/ ]);

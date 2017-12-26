@@ -46,41 +46,41 @@ console.log('正整数', Num(25736));
 
 // 原型链实现继承例子：
 
-function SuperType() {
-	this.property = true;
-}
-SuperType.prototype.getSuperValue = function() {
-	return this.property;
-}
+// function SuperType() {
+// 	this.property = true;
+// }
+// SuperType.prototype.getSuperValue = function() {
+// 	return this.property;
+// }
 
-function subType() {
-	this.property = false;
-}
-//继承了SuperType
-SubType.prototype = new SuperType();
-SubType.prototype.getSubValue = function() {
-	return this.property;
-}
-var instance = new SubType();
-console.log(instance.getSuperValue()); //true
+// function subType() {
+// 	this.property = false;
+// }
+// //继承了SuperType
+// SubType.prototype = new SuperType();
+// SubType.prototype.getSubValue = function() {
+// 	return this.property;
+// }
+// var instance = new SubType();
+// console.log(instance.getSuperValue()); //true
 
 
 // 2. 借用构造函数
 
 // 基本思想： 在子类型构造函数的内部调用超类构造函数， 通过使用call() 和apply() 方法可以在新创建的对象上执行构造函数。
 
-function SuperType() {
-	this.colors = ["red", "blue", "green"];
-}
+// function SuperType() {
+// 	this.colors = ["red", "blue", "green"];
+// }
 
-function SubType() {
-	SuperType.call(this, arguments); //继承了SuperType
-}
-var instance1 = new SubType();
-instance1.colors.push("black");
-console.log(instance1.colors); //"red","blue","green","black"
-var instance2 = new SubType();
-console.log(instance2.colors); //"red","blue","green"
+// function SubType() {
+// 	SuperType.call(this, arguments); //继承了SuperType
+// }
+// var instance1 = new SubType();
+// instance1.colors.push("black");
+// console.log(instance1.colors); //"red","blue","green","black"
+// var instance2 = new SubType();
+// console.log(instance2.colors); //"red","blue","green"
 
 // 3. 组合继承
 
@@ -117,3 +117,73 @@ console.log(instance2.colors); //"red","blue","green"
 // 4.原型式继承
 
 // 基本想法：借助原型可以基于已有的对象创建新对象，同时还不必须因此创建自定义的类型。
+
+// ES5 中的写法
+function Person(name = 'jason', age = '18') {
+	this.name = name;
+	this.age = age;
+}
+
+Person.prototype.sayName = function() {
+	return this.name;
+}
+
+Person.prototype.sayAge = function() {
+	return this.age;
+}
+
+var p1 = new Person('Zinedine', '28');
+var name1 = p1.sayName();
+console.log(name1);
+var age1 = p1.sayAge();
+console.log(age1);
+
+// Worker 继承了 Person 的 name 和 age
+function Worker(name = 'jason', age = '18', job = '捡破烂的') {
+	Person.call(this, name, age);
+	this.job = job;
+}
+
+Worker.prototype = new Person();
+Worker.prototype.constructor = Worker;
+
+Worker.prototype.sayJob = function() {
+	return this.job;
+}
+
+var w1 = new Worker('xiaoming', '50', '掏大粪的');
+var job1 = w1.sayJob();
+console.log(job1);
+
+
+// es6 的写法
+class Animal {
+	constructor(kind = '猫猫', speak = '瞄') {
+		this.kind = kind;
+		this.speak = speak;
+	}
+
+	saySpeak() {
+		return this.speak;
+	}
+}
+
+const a1 = new Animal('羊', '绵');
+const say1 = a1.saySpeak();
+console.log(say1);
+
+// 继承
+class Dog extends Animal {
+	constructor(kind, speak = '汪汪') {
+		super(kind);
+		this.speak = speak;
+	}
+
+	saySpeak() {
+		return this.speak;
+	}
+
+}
+
+const d1 = new Dog('狗狗');
+console.log(d1.saySpeak());
